@@ -123,4 +123,4 @@ MIT License
 
 ## 👨‍💻 Developed By
 
-- [Your Name](https://github.com/your-username)
+- [Bilal Imran](https://github.com/bilalimran29)
