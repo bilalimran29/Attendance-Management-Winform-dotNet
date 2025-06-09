@@ -1,0 +1,242 @@
+-- Create Database
+CREATE DATABASE AMS_DB;
+
+
+USE AMS_DB;
+
+
+
+-- Admin Table (for login)
+CREATE TABLE Admin (
+    AdminID INT PRIMARY KEY IDENTITY(1,1),
+    Username VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL
+);
+
+-- Insert default admin
+INSERT INTO Admin (Username, Password) VALUES ('admin', 'admin123');
+
+-- Students Table
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(100),
+    RollNo VARCHAR(20) UNIQUE,
+    Department VARCHAR(50)
+);
+
+-- Teachers Table
+CREATE TABLE Teachers (
+    TeacherID INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(100),
+    Subject VARCHAR(50)
+);
+
+-- Attendance Table
+CREATE TABLE Attendance (
+    AttendanceID INT PRIMARY KEY IDENTITY(1,1),
+    StudentID INT FOREIGN KEY REFERENCES Students(StudentID),
+    TeacherID INT FOREIGN KEY REFERENCES Teachers(TeacherID),
+    Date DATE,
+    Status VARCHAR(10) CHECK (Status IN ('Present', 'Absent'))
+);
+
+-- Attendance Log Table
+CREATE TABLE AttendanceLog (
+    LogID INT PRIMARY KEY IDENTITY(1,1),
+    AttendanceID INT,
+    Action VARCHAR(20),
+    ActionDate DATETIME DEFAULT GETDATE()
+);
+
+---------------------
+-- 2. TRIGGER
+---------------------
+CREATE TRIGGER trg_AfterInsert_Attendance
+ON Attendance
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO AttendanceLog (AttendanceID, Action)
+    SELECT AttendanceID, 'INSERT' FROM inserted;
+END;
+
+
+-- STORED PROCEDURES (CRUD)
+
+
+-- STUDENTS CRUD
+
+-- Add Student
+CREATE PROCEDURE sp_AddStudent
+    @Name VARCHAR(100),
+    @RollNo VARCHAR(20),
+    @Department VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Students (Name, RollNo, Department)
+    VALUES (@Name, @RollNo, @Department);
+END;
+
+
+-- Read All Students
+CREATE PROCEDURE sp_GetStudents
+AS
+BEGIN
+    SELECT * FROM Students;
+END;
+
+
+-- Update Student
+CREATE PROCEDURE sp_UpdateStudent
+    @StudentID INT,
+    @Name VARCHAR(100),
+    @RollNo VARCHAR(20),
+    @Department VARCHAR(50)
+AS
+BEGIN
+    UPDATE Students
+    SET Name = @Name, RollNo = @RollNo, Department = @Department
+    WHERE StudentID = @StudentID;
+END;
+
+
+-- Delete Student
+CREATE PROCEDURE sp_DeleteStudent
+    @StudentID INT
+AS
+BEGIN
+    DELETE FROM Students WHERE StudentID = @StudentID;
+END;
+
+
+-- TEACHERS CRUD
+
+-- Add Teacher
+CREATE PROCEDURE sp_AddTeacher
+    @Name VARCHAR(100),
+    @Subject VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Teachers (Name, Subject)
+    VALUES (@Name, @Subject);
+END;
+
+
+-- Read All Teachers
+CREATE PROCEDURE sp_GetTeachers
+AS
+BEGIN
+    SELECT * FROM Teachers;
+END;
+
+
+-- Update Teacher
+CREATE PROCEDURE sp_UpdateTeacher
+    @TeacherID INT,
+    @Name VARCHAR(100),
+    @Subject VARCHAR(50)
+AS
+BEGIN
+    UPDATE Teachers
+    SET Name = @Name, Subject = @Subject
+    WHERE TeacherID = @TeacherID;
+END;
+
+
+-- Delete Teacher
+CREATE PROCEDURE sp_DeleteTeacher
+    @TeacherID INT
+AS
+BEGIN
+    DELETE FROM Teachers WHERE TeacherID = @TeacherID;
+END;
+
+
+-- ATTENDANCE CRUD
+
+-- Mark Attendance
+CREATE PROCEDURE sp_MarkAttendance
+    @StudentID INT,
+    @TeacherID INT,
+    @Date DATE,
+    @Status VARCHAR(10)
+AS
+BEGIN
+    INSERT INTO Attendance (StudentID, TeacherID, Date, Status)
+    VALUES (@StudentID, @TeacherID, @Date, @Status);
+END;
+
+
+-- Read Attendance by Date
+CREATE PROCEDURE sp_ViewAttendanceByDate
+    @Date DATE
+AS
+BEGIN
+    SELECT a.AttendanceID, s.Name AS StudentName, t.Name AS TeacherName, a.Date, a.Status
+    FROM Attendance a
+    JOIN Students s ON a.StudentID = s.StudentID
+    JOIN Teachers t ON a.TeacherID = t.TeacherID
+    WHERE a.Date = @Date;
+END;
+
+
+-- Update Attendance
+CREATE PROCEDURE sp_UpdateAttendance
+    @AttendanceID INT,
+    @Status VARCHAR(10)
+AS
+BEGIN
+    UPDATE Attendance
+    SET Status = @Status
+    WHERE AttendanceID = @AttendanceID;
+END;
+
+
+-- Delete Attendance
+CREATE PROCEDURE sp_DeleteAttendance
+    @AttendanceID INT
+AS
+BEGIN
+    DELETE FROM Attendance WHERE AttendanceID = @AttendanceID;
+END;
+
+
+
+
+-- Add 4 Students
+EXEC sp_AddStudent 'Alice Johnson', 'R001', 'Computer Science';
+EXEC sp_AddStudent 'Bob Smith', 'R002', 'Electronics';
+EXEC sp_AddStudent 'Charlie Brown', 'R003', 'Mechanical';
+EXEC sp_AddStudent 'Diana Prince', 'R004', 'Civil';
+
+-- Add 4 Teachers
+EXEC sp_AddTeacher 'Dr. Sharma', 'Mathematics';
+EXEC sp_AddTeacher 'Prof. Kapoor', 'Physics';
+EXEC sp_AddTeacher 'Ms. Rachel', 'Chemistry';
+EXEC sp_AddTeacher 'Mr. Wayne', 'Programming';
+
+-- Mark Attendance
+EXEC sp_MarkAttendance 1, 1, '2025-06-09', 'Present';
+EXEC sp_MarkAttendance 2, 2, '2025-06-09', 'Absent';
+EXEC sp_MarkAttendance 3, 3, '2025-06-09', 'Present';
+EXEC sp_MarkAttendance 4, 4, '2025-06-09', 'Absent';
+
+-- View Attendance
+EXEC sp_ViewAttendanceByDate '2025-06-09';
+
+-- Update Examples
+EXEC sp_UpdateStudent 1, 'Alice Johnson', 'R001', 'IT';
+EXEC sp_UpdateTeacher 2, 'Prof. Kapoor', 'Advanced Physics';
+EXEC sp_UpdateAttendance 2, 'Present';
+
+-- Delete Examples
+EXEC sp_DeleteStudent 4;
+EXEC sp_DeleteTeacher 3;
+EXEC sp_DeleteAttendance 4;
+
+Delete attendance records for TeacherID = 3
+DELETE FROM Attendance WHERE TeacherID = 3;
+
+ Now delete the teacher
+EXEC sp_DeleteTeacher 3;
+
