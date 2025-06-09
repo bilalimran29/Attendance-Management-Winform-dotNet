@@ -1,0 +1,16 @@
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.csproj.AssemblyReference.cache
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.AttendanceForm.resources
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.DashboardForm.resources
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.LoginForm.resources
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.Properties.Resources.resources
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.StudentForm.resources
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.TeacherForm.resources
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.ViewAttendanceForm.resources
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.csproj.GenerateResource.cache
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.csproj.CoreCompileInputs.cache
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\bin\Debug\AMSF.exe.config
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\bin\Debug\AMSF.exe
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\bin\Debug\AMSF.pdb
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.exe
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.pdb
+C:\Users\bilal\OneDrive\Desktop\sql vs\AMSF\AMSF\obj\Debug\AMSF.exe.config
